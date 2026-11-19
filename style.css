@@ -403,21 +403,92 @@ body {
   font-size: 0.8rem;
 }
 
-/* 手機版適配 */
+/* 手機版適配（調整為舒適的 85% 視覺比例） */
 @media (max-width: 768px) {
-  .hero {
-    height: 48vh;
-    min-height: 340px;
-    padding-bottom: 32px;
+  .navbar {
+    padding: 12px 4%;
   }
-  .hero-title {
-    font-size: 1.55rem;
+  .logo {
+    font-size: 1.3rem;
+    letter-spacing: 1px;
+  }
+  .nav-right {
+    gap: 8px;
+  }
+  .search-box {
+    padding: 5px 10px;
+  }
+  .search-icon {
+    width: 14px;
+    height: 14px;
+    margin-right: 6px;
   }
   #search-input {
-    width: 120px;
+    width: 95px;
+    font-size: 0.8rem;
+  }
+  .btn-outline {
+    padding: 5px 10px;
+    font-size: 0.78rem;
+  }
+
+  /* 首頁看板高度與字級縮小 */
+  .hero {
+    height: 44vh;
+    min-height: 290px;
+    padding: 0 4% 24px;
+  }
+  .hero-badge {
+    font-size: 0.65rem;
+    padding: 2px 8px;
+    margin-bottom: 8px;
+  }
+  .hero-title {
+    font-size: 1.35rem;
+    margin-bottom: 6px;
+  }
+  .hero-desc {
+    font-size: 0.82rem;
+    margin-bottom: 14px;
+  }
+  .btn-primary {
+    padding: 8px 16px;
+    font-size: 0.82rem;
+  }
+
+  /* 成員篩選按鈕縮小並可橫向單排滑動，不佔滿半個螢幕 */
+  .filter-bar {
+    padding: 4px 4% 16px;
+  }
+  .filter-group {
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    padding-bottom: 4px;
+    -webkit-overflow-scrolling: touch;
+  }
+  .filter-group::-webkit-scrollbar {
+    display: none;
+  }
+  .filter-chip {
+    padding: 5px 12px;
+    font-size: 0.78rem;
+    white-space: nowrap;
+    flex-shrink: 0;
+  }
+
+  /* 分類標題與影片卡片縮小至約 85% 比例 */
+  .series-section {
+    margin-bottom: 24px;
+  }
+  .series-title {
+    font-size: 1.02rem;
+  }
+  .row-slider {
+    gap: 10px;
   }
   .video-card {
-    flex: 0 0 210px;
+    flex: 0 0 165px;
+    border-radius: 6px;
   }
   .grid-wall {
     grid-template-columns: repeat(2, 1fr);
