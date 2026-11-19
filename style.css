@@ -2,12 +2,12 @@
   --bg-main: #262626;
   --bg-card: #303030;
   --bg-nav: rgba(38, 38, 38, 0.92);
-  --accent: #A2C5DA;
-  --accent-hover: #b8d5e6;
+  --accent: #FF6FD6;
+  --accent-hover: #ff8ee0;
   --accent-text: #1a1a1a;
   --text-primary: #F5F5F5;
   --text-secondary: #B0B0B0;
-  --border-subtle: rgba(162, 197, 218, 0.25);
+  --border-subtle: rgba(255, 111, 214, 0.25);
 }
 
 * {
