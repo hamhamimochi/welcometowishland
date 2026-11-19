@@ -123,8 +123,7 @@ function renderContent() {
   const filtered = allVideos.filter(video => {
     const matchMember =
       currentMember === "ALL" ||
-      video.members.includes(currentMember) ||
-      (currentMember !== "OT6" && video.members.includes("OT6"));
+      video.members.includes(currentMember);
 
     const keyword = currentSearch.toLowerCase();
     const matchSearch =
