@@ -457,23 +457,15 @@ body {
   }
 
   /* 成員篩選按鈕縮小並可橫向單排滑動，不佔滿半個螢幕 */
-  .filter-bar {
-    padding: 4px 4% 16px;
+  ..filter-bar {
+    padding: 4px 4% 18px;
   }
   .filter-group {
-    flex-wrap: nowrap;
-    overflow-x: auto;
-    padding-bottom: 4px;
-    -webkit-overflow-scrolling: touch;
-  }
-  .filter-group::-webkit-scrollbar {
-    display: none;
+    gap: 6px;
   }
   .filter-chip {
-    padding: 5px 12px;
+    padding: 5px 11px;
     font-size: 0.78rem;
-    white-space: nowrap;
-    flex-shrink: 0;
   }
 
   /* 分類標題與影片卡片縮小至約 85% 比例 */
