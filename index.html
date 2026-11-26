@@ -51,8 +51,25 @@
   
   <section class="filter-bar">
     <div class="filter-group" id="member-filters">
+      
+      <div class="category-dropdown" id="category-dropdown">
+        <button type="button" class="filter-chip category-trigger" id="category-btn">
+          <span id="category-label">類別</span>
+          <svg class="chevron-icon" viewBox="0 0 24 24" width="14" height="14" stroke="currentColor" stroke-width="2.5" fill="none">
+            <polyline points="6 9 12 15 18 9"></polyline>
+          </svg>
+        </button>
+        <div class="category-menu" id="category-menu">
+          <button type="button" class="category-item active" data-series="ALL">全部類別</button>
+         
+        </div>
+      </div>
+
+      <span class="filter-divider"></span>
+
+     
       <button class="filter-chip active" data-member="ALL">全部</button>
-     <button class="filter-chip" data-member="OT6">團體</button>
+      <button class="filter-chip" data-member="OT6">團體</button>
       <button class="filter-chip" data-member="SION">SION</button>
       <button class="filter-chip" data-member="RIKU">RIKU</button>
       <button class="filter-chip" data-member="YUSHI">YUSHI</button>

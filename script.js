@@ -1,15 +1,13 @@
-
 const HERO_CONFIG = {
   title: "NCT WISH 'I SPY' MV",
   description: " NCT WISH's 4th mini album \"I SPY\" is out! ",
-  youtubeUrl: "https://youtu.be/xIlFjHHUfI0" // MV 
+  youtubeUrl: "https://youtu.be/xIlFjHHUfI0"
 };
-
 
 let allVideos = [];
 let currentMember = "ALL";
+let currentSeries = "ALL";
 let currentSearch = "";
-
 
 function extractYouTubeID(url) {
   if (!url) return null;
@@ -18,11 +16,9 @@ function extractYouTubeID(url) {
   return match ? match[1] : null;
 }
 
-
 function getThumbnailUrl(videoId) {
   return `https://img.youtube.com/vi/${videoId}/maxresdefault.jpg`;
 }
-
 
 function initHeroBanner() {
   const heroId = extractYouTubeID(HERO_CONFIG.youtubeUrl);
@@ -36,14 +32,12 @@ function initHeroBanner() {
   }
 }
 
-
 function loadCSVData() {
   Papa.parse("data.csv", {
     download: true,
     header: true,
     skipEmptyLines: true,
     complete: function(results) {
-      
       allVideos = results.data
         .map(row => {
           const title = (row.Title || row.title || row["名稱"] || "").trim();
@@ -62,20 +56,50 @@ function loadCSVData() {
             videoId
           };
         })
-        .filter(item => item.videoId && item.title); 
+        .filter(item => item.videoId && item.title);
 
-      
       allVideos.sort((a, b) => (b.date > a.date ? 1 : -1));
 
+      populateCategoryMenu();
       renderContent();
     },
     error: function(err) {
       document.getElementById("content-container").innerHTML =
-        `<div class="empty-state">找不到 data.csv 檔案，請確認已將 Notion 匯出的檔案命名為 data.csv 並放在同一資料夾中。</div>`;
+        `<div class="empty-state">找不到 data.csv 檔案，請確認已將匯出的檔案命名為 data.csv 並放在同一資料夾中。</div>`;
     }
   });
 }
 
+function populateCategoryMenu() {
+  const menu = document.getElementById("category-menu");
+  if (!menu) return;
+
+  const seriesOldestDate = {};
+  allVideos.forEach(video => {
+    if (!video.date) return;
+    if (!seriesOldestDate[video.series] || video.date < seriesOldestDate[video.series]) {
+      seriesOldestDate[video.series] = video.date;
+    }
+  });
+
+  const uniqueSeries = [...new Set(allVideos.map(v => v.series))].sort((a, b) => {
+    if (a === "外部綜藝") return 1;
+    if (b === "外部綜藝") return -1;
+    const dateA = seriesOldestDate[a] || "9999-99-99";
+    const dateB = seriesOldestDate[b] || "9999-99-99";
+    return dateA.localeCompare(dateB);
+  });
+
+  menu.innerHTML = `<button type="button" class="category-item active" data-series="ALL">全部類別</button>`;
+  uniqueSeries.forEach(series => {
+    const btn = document.createElement("button");
+    btn.type = "button";
+    btn.className = "category-item";
+    btn.dataset.series = series;
+    btn.textContent = series;
+    menu.appendChild(btn);
+  });
+}
 
 function createVideoCard(video) {
   const card = document.createElement("a");
@@ -89,7 +113,7 @@ function createVideoCard(video) {
   img.src = getThumbnailUrl(video.videoId);
   img.alt = video.title;
   img.loading = "lazy";
-  
+
   img.onerror = function() {
     if (this.src.includes("maxresdefault")) {
       this.src = `https://img.youtube.com/vi/${video.videoId}/hqdefault.jpg`;
@@ -111,16 +135,18 @@ function createVideoCard(video) {
   return card;
 }
 
-
 function renderContent() {
   const container = document.getElementById("content-container");
   container.innerHTML = "";
 
- 
   const filtered = allVideos.filter(video => {
     const matchMember =
       currentMember === "ALL" ||
       video.members.includes(currentMember);
+
+    const matchSeries =
+      currentSeries === "ALL" ||
+      video.series === currentSeries;
 
     const keyword = currentSearch.toLowerCase();
     const matchSearch =
@@ -129,7 +155,7 @@ function renderContent() {
       video.series.toLowerCase().includes(keyword) ||
       video.date.includes(keyword);
 
-    return matchMember && matchSearch;
+    return matchMember && matchSeries && matchSearch;
   });
 
   if (filtered.length === 0) {
@@ -137,12 +163,12 @@ function renderContent() {
     return;
   }
 
-  
-  if (currentSearch !== "" || currentMember !== "ALL") {
+  if (currentSearch !== "" || currentMember !== "ALL" || currentSeries !== "ALL") {
     const header = document.createElement("div");
     header.className = "series-header";
+    const headerTitle = currentSeries !== "ALL" ? currentSeries : "篩選結果";
     header.innerHTML = `
-      <h2 class="series-title">篩選結果</h2>
+      <h2 class="series-title">${headerTitle}</h2>
       <span class="series-count">共 ${filtered.length} 部影片</span>
     `;
     container.appendChild(header);
@@ -154,7 +180,6 @@ function renderContent() {
     return;
   }
 
-  
   const seriesGroups = {};
   filtered.forEach(video => {
     if (!seriesGroups[video.series]) {
@@ -184,7 +209,6 @@ function renderContent() {
   });
 }
 
-
 document.addEventListener("DOMContentLoaded", () => {
   initHeroBanner();
   loadCSVData();
@@ -205,37 +229,75 @@ document.addEventListener("DOMContentLoaded", () => {
     renderContent();
   });
 
-  
-  document.querySelectorAll(".filter-chip").forEach(chip => {
+  document.querySelectorAll(".filter-chip:not(.category-trigger)").forEach(chip => {
     chip.addEventListener("click", () => {
-      document.querySelectorAll(".filter-chip").forEach(c => c.classList.remove("active"));
+      document.querySelectorAll(".filter-chip:not(.category-trigger)").forEach(c => c.classList.remove("active"));
       chip.classList.add("active");
       currentMember = chip.dataset.member;
       renderContent();
     });
   });
 
-  
+  const dropdown = document.getElementById("category-dropdown");
+  const categoryBtn = document.getElementById("category-btn");
+  const categoryMenu = document.getElementById("category-menu");
+  const categoryLabel = document.getElementById("category-label");
+
+  categoryBtn.addEventListener("click", e => {
+    e.stopPropagation();
+    dropdown.classList.toggle("open");
+  });
+
+  categoryMenu.addEventListener("click", e => {
+    const item = e.target.closest(".category-item");
+    if (!item) return;
+
+    categoryMenu.querySelectorAll(".category-item").forEach(i => i.classList.remove("active"));
+    item.classList.add("active");
+
+    currentSeries = item.dataset.series;
+    if (currentSeries === "ALL") {
+      categoryLabel.textContent = "類別";
+      categoryBtn.classList.remove("has-selection");
+    } else {
+      categoryLabel.textContent = currentSeries;
+      categoryBtn.classList.add("has-selection");
+    }
+
+    dropdown.classList.remove("open");
+    renderContent();
+  });
+
+  document.addEventListener("click", () => {
+    dropdown.classList.remove("open");
+  });
+
   document.getElementById("random-btn").addEventListener("click", () => {
     if (allVideos.length === 0) return;
     const randomVideo = allVideos[Math.floor(Math.random() * allVideos.length)];
     window.open(randomVideo.url, "_blank", "noopener,noreferrer");
   });
 
-  
   document.getElementById("reset-home").addEventListener("click", e => {
     e.preventDefault();
     searchInput.value = "";
     currentSearch = "";
     clearBtn.classList.remove("visible");
     currentMember = "ALL";
-    document.querySelectorAll(".filter-chip").forEach(c => c.classList.remove("active"));
+    document.querySelectorAll(".filter-chip:not(.category-trigger)").forEach(c => c.classList.remove("active"));
     document.querySelector('.filter-chip[data-member="ALL"]').classList.add("active");
+
+    currentSeries = "ALL";
+    categoryLabel.textContent = "類別";
+    categoryBtn.classList.remove("has-selection");
+    categoryMenu.querySelectorAll(".category-item").forEach(i => i.classList.remove("active"));
+    const allCat = categoryMenu.querySelector('.category-item[data-series="ALL"]');
+    if (allCat) allCat.classList.add("active");
+
     renderContent();
     window.scrollTo({ top: 0, behavior: "smooth" });
   });
 
- 
   window.addEventListener("scroll", () => {
     document.getElementById("navbar").classList.toggle("scrolled", window.scrollY > 40);
   });
