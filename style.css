@@ -19,11 +19,15 @@
 body {
   background-color: var(--bg-main);
   color: var(--text-primary);
-  font-family: 'Noto Sans TC', -apple-system, BlinkMacSystemFont, sans-serif;
+  font-family: 'Huninn', -apple-system, BlinkMacSystemFont, sans-serif;
   line-height: 1.5;
   overflow-x: hidden;
 }
 
+button,
+input {
+  font-family: inherit;
+}
 
 .navbar {
   position: fixed;
