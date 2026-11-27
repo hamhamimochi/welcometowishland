@@ -1,6 +1,6 @@
 const HERO_CONFIG = {
   title: "NCT WISH 'I SPY' MV",
-  description: " NCT WISH's 4th mini album \"I SPY\" is out! ",
+  description: " NCT WISH's 4th mini album 'I SPY' is out! ",
   youtubeUrl: "https://youtu.be/xIlFjHHUfI0"
 };
 
