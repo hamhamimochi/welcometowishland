@@ -272,10 +272,56 @@ document.addEventListener("DOMContentLoaded", () => {
     dropdown.classList.remove("open");
   });
 
-  document.getElementById("random-btn").addEventListener("click", () => {
+  const randomModal = document.getElementById("random-modal");
+  const randomThumb = document.getElementById("random-thumb");
+  const randomSeries = document.getElementById("random-series");
+  const randomDate = document.getElementById("random-date");
+  const randomTitle = document.getElementById("random-title");
+  const randomWatchBtn = document.getElementById("random-watch-btn");
+  let lastRandomId = null;
+
+  function pickAndShowRandomVideo() {
     if (allVideos.length === 0) return;
-    const randomVideo = allVideos[Math.floor(Math.random() * allVideos.length)];
-    window.open(randomVideo.url, "_blank", "noopener,noreferrer");
+
+    const pool = allVideos.filter(video => {
+      const matchMember = currentMember === "ALL" || video.members.includes(currentMember);
+      const matchSeries = currentSeries === "ALL" || video.series === currentSeries;
+      return matchMember && matchSeries;
+    });
+
+    const sourceList = pool.length > 0 ? pool : allVideos;
+    let candidates = sourceList.filter(v => v.videoId !== lastRandomId);
+    if (candidates.length === 0) candidates = sourceList;
+
+    const picked = candidates[Math.floor(Math.random() * candidates.length)];
+    lastRandomId = picked.videoId;
+
+    randomThumb.src = getThumbnailUrl(picked.videoId);
+    randomThumb.onerror = function() {
+      if (this.src.includes("maxresdefault")) {
+        this.src = `https://img.youtube.com/vi/${picked.videoId}/hqdefault.jpg`;
+      }
+    };
+    randomThumb.alt = picked.title;
+    randomSeries.textContent = picked.series;
+    randomDate.textContent = picked.date;
+    randomTitle.textContent = picked.title;
+    randomWatchBtn.href = picked.url;
+
+    randomModal.classList.add("open");
+  }
+
+  document.getElementById("random-btn").addEventListener("click", pickAndShowRandomVideo);
+  document.getElementById("random-reroll-btn").addEventListener("click", pickAndShowRandomVideo);
+
+  document.getElementById("close-random").addEventListener("click", () => {
+    randomModal.classList.remove("open");
+  });
+
+  randomModal.addEventListener("click", e => {
+    if (e.target === randomModal) {
+      randomModal.classList.remove("open");
+    }
   });
 
   document.getElementById("reset-home").addEventListener("click", e => {
