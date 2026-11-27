@@ -81,7 +81,7 @@ input {
 
 .search-box:focus-within {
   border-color: var(--accent);
-  box-shadow: 0 0 0 2px rgba(162, 197, 218, 0.2);
+  box-shadow: 0 0 0 2px rgba(255, 111, 214, 0.2);
 }
 
 .search-icon {
@@ -138,7 +138,7 @@ input {
 }
 
 .btn-outline {
-  background-color: rgba(162, 197, 218, 0.12);
+  background-color: rgba(255, 111, 214, 0.12);
   color: var(--accent);
   border: 1px solid var(--accent);
   padding: 7px 14px;
@@ -392,7 +392,7 @@ input {
 }
 
 .row-slider::-webkit-scrollbar-thumb {
-  background: rgba(162, 197, 218, 0.35);
+  background: rgba(255, 111, 214, 0.35);
   border-radius: 3px;
 }
 
