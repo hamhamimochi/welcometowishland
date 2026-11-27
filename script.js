@@ -347,4 +347,24 @@ document.addEventListener("DOMContentLoaded", () => {
   window.addEventListener("scroll", () => {
     document.getElementById("navbar").classList.toggle("scrolled", window.scrollY > 40);
   });
+
+  const helpBtn = document.getElementById("help-btn");
+  const helpModal = document.getElementById("help-modal");
+  const closeHelp = document.getElementById("close-help");
+
+  if (helpBtn && helpModal && closeHelp) {
+    helpBtn.addEventListener("click", () => {
+      helpModal.classList.add("open");
+    });
+
+    closeHelp.addEventListener("click", () => {
+      helpModal.classList.remove("open");
+    });
+
+    helpModal.addEventListener("click", e => {
+      if (e.target === helpModal) {
+        helpModal.classList.remove("open");
+      }
+    });
+  }
 });

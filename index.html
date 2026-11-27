@@ -90,10 +90,11 @@
     <div class="loading-state">正在載入片單 ... (꧞ˆᢦˆ)</div>
   </main>
 
-  <footer class="footer">
-    <p> 本站內容為個人整理，相關版權皆歸原所屬公司及權利人所有。</p>
-  </footer>
   
+  <footer class="footer">
+    <p>本站內容為個人整理，相關版權皆歸原所屬公司及權利人所有。 ｜ <button type="button" id="help-btn" class="footer-link">使用說明</button></p>
+  </footer>
+
 <div class="modal-backdrop" id="random-modal">
     <div class="random-card">
       <button type="button" class="random-close" id="close-random">✕</button>
@@ -113,6 +114,23 @@
           </a>
           <button type="button" id="random-reroll-btn" class="btn-outline">🎲 換一部</button>
         </div>
+      </div>
+    </div>
+  </div>
+  <div class="modal-backdrop" id="help-modal">
+    <div class="modal-card">
+      <div class="modal-header">
+        <h3>WISHLAND 使用說明</h3>
+        <button type="button" class="modal-close" id="close-help">✕</button>
+      </div>
+      <div class="modal-body">
+        <ul>
+          <li><strong>類別篩選：</strong>點擊「類別」可瀏覽特定系列企劃（支援與成員交叉篩選）。</li>
+          <li><strong>成員分類規則：</strong>僅單人／雙人出演的影片或以特定成員為主題的企劃才會歸類於成員標籤。</li>
+          <li><strong>關鍵字搜尋：</strong>可搜尋標題、系列名稱或日期（格式為 <code>YYYY-MM-DD</code>，如 <code>2024</code>、<code>2024-02</code>）。</li>
+          <li><strong>隨機推薦：</strong>不知道要看哪一集時，可點擊「🎲 隨機看」會隨機推薦影片（若已選取成員或類別，將優先從該條件內抽取）。</li>
+          <li><strong>回到首頁：</strong>點擊左上角 <code>WISHLAND</code> 可清除篩選並回到頂部。</li>
+        </ul>
       </div>
     </div>
   </div>
